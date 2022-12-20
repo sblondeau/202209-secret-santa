@@ -1,4 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap');
+
+:root {
+    --primary: hsl(0, 100%, 50%);
+    --secondary: gold;
+    --tertiary: rgb(58, 125, 22);
+    --light: white;
+    --dark: black;
+    --intermediate: grey;
+
+    --spacing-sm: 4px;
+    --spacing: 8px;
+    --spacing-2: 16px; 
+    --spacing-3: 24px; 
+    --spacing-4: 32px; 
+    
+    font-family: 'Mountains of Christmas', cursive;
+}
+
 body {
-    background-color: red;
+    background-image: url('christmas.avif');
     color: white;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    display: flex;
+    height: 90vh;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    display: none;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    margin: var(--spacing);
+}
+
+label::after {
+    display: inline-block;
+    margin-left: var(--spacing) ;
+    --width: 50px; 
+    --color: var(--dark);
+    content:'';
+    width: var(--width);
+    height: calc(var(--width) / 2);
+    background: linear-gradient(var(--direction, 90deg), var(--color) 50%, rgba(255, 255, 255, 0.24) 50%);
+    border-radius: 8px;
+    border: 2px solid var(--color);
+    box-shadow: 0 0 2px inset var(--dark);
+}
+
+input:checked + label::after {
+    --color: var(--primary);
+    --direction: -90deg;
+}
+
+h1 {
+    opacity: 0;
+    transform-style: preserve-3d;
+    padding: var(--spacing) var(--spacing-4) ;
+    background-color: var(--tertiary);
+    clip-path: polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%, 5% 50%);
+}
+
+.box {
+    --size: 300px;
+    position: relative;
+    margin: auto;
+    width: var(--size);
+    aspect-ratio: 1 / 1;
+    transform-style: preserve-3d;
+    transform-origin: 50% 100%;
+    animation: rotate 10s linear infinite;
+    animation-play-state: paused;
+}
+
+.face {
+    position: absolute;
+    inset: 0;
+    background-color: var(--primary);
+    transform-origin: var(--transform-originX, center) var(--transform-originY, center) var(--transform-originZ, 0);
+    transform: rotateX(var(--rotateX, 0)) rotateY(var(--rotateY, 0));
+    background:
+        linear-gradient(to left, transparent 45%, var(--secondary) 45%, var(--secondary) 55%, transparent 55%),
+        linear-gradient(to top, transparent 45%, var(--secondary) 45%, var(--secondary) 55%, transparent 55%),
+        var(--primary);
+    transition: transform 0.5s;
+}
+
+.face:hover {
+    filter: brightness(110%);
+}
+
+.face:nth-of-type(2) {
+    --transform-originX: 100%;
+    --rotateY: 90deg;
+}
+
+.face:nth-of-type(3) {
+    --transform-originX: 0;
+    --rotateY: -90deg;
+}
+
+.face:nth-of-type(4) {
+    --transform-originY: 0;
+    --rotateX: 90deg;
+}
+
+.face:nth-of-type(5) {
+    --transform-originY: 100%;
+    --rotateX: -90deg;
+}
+
+.face:nth-of-type(6) {
+    --transform-originZ: calc(var(--size) / 2);
+    --rotateX: 180deg;
+}
+
+#open:checked ~ .box .face:nth-of-type(4) {
+    --rotateX: 180deg;
+    transition-delay: 2s;
+}
+
+.laces {
+    transform-style: preserve-3d;
+}
+
+.lace {
+    position: absolute;
+    width: calc(var(--size) / 12);
+    aspect-ratio: 1 / 3;
+    border-radius: 35%;
+    border:20px solid var(--secondary);
+    transform-origin: center bottom;
+    transform: translateY(-100%) translateX(calc((var(--size) - 50px) * 0.5)) translateZ(calc(var(--size) / 2)) rotateX(var(--rotate-lace, 8deg));
+    transition: width 2s, opacity 0.4s 1.6s;
+}
+
+.lace:nth-of-type(2) {
+    --rotate-lace:-6deg;
+}
+
+.ruban {
+    position: absolute;
+    width: calc(var(--size) / 6);
+    border:10px solid var(--secondary);
+    transform-origin: left;
+    border-radius: 25%;
+    transform: translateY(calc(-100% + 20px)) translateX(calc((var(--size)) * 0.5)) translateZ(calc(var(--size) / 2))  rotate(-20deg);
+    transition: width 2s, opacity 0.4s 1.6s;
+}
+
+#open:checked ~ .box .laces .ruban {
+    width: var(--size);
+    opacity: 0;
+}
+#open:checked ~ .box .laces .lace {
+    width: 0;
+    opacity: 0;
+}
+
+#open:checked ~ h1 {
+    animation: title 1 2s ease-in-out 2.5s forwards;
+}
+
+#turn:checked ~ .box {
+    animation-play-state: running;
+}
+
+.flamme {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(251, 188, 71, 0.779);
+    border: 50px solid rgba(255, 253, 209, 0.867);
+    border-radius: 50%;
+    filter: blur(40px);
+    top: 75%;
+    left: 36%;
+    animation: flammes 2s infinite alternate;
+}
+
+@keyframes flammes {
+    from {
+        transform: scale(0.8);
+    }
+    to {
+        transform: scale(1.2);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateY(0) rotateX(-10deg);
+    }
+    50% {
+        transform: rotateY(0.5);
+    }
+    100% {
+        transform: rotateY(1turn) rotateX(-10deg);
+    }
+}
+
+@keyframes title {
+    from {
+        transform: translateY(300px) rotate(-90deg)  scale(0.7);
+        opacity: 0.8;
+    }
+    to {
+        transform: translateY(100px) rotate(0) scale(1.2) translateZ(200px);
+        opacity: 1;
+    }
 }
